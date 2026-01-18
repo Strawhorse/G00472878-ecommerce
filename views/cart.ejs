@@ -1,0 +1,23 @@
+<%- include("partialViews/head") %>
+<%- include("partialViews/navbar") %>
+
+<main class="container my-4">
+    <h1>Your Cart</h1>
+
+    <% if (cartItems.length === 0) { %>
+        <p>Your cart is unfortunately empty. I recommend you buy something.</p>
+    <% } else { %>
+        <ul class="list-group mb-3">
+            <% cartItems.forEach(item => { %>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><%= item.name %> (x<%= item.qty %>)</span>
+                    <strong>€<%= (item.price * item.qty).toFixed(2) %></strong>
+                </li>
+            <% }) %>
+        </ul>
+
+        <h4>Total: €<%= total.toFixed(2) %></h4>
+    <% } %>
+</main>
+
+<%- include("partialViews/footer") %>

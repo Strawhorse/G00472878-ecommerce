@@ -1,100 +1,86 @@
 // app.js
-// This is the entry point for the entire web application.
-// Node runs THIS file first when you type: npm start
+// Entry point for the whole app
+// Node runs this first when you do npm start
 
 
-
-// Import Express so we can create a web server easily.
-const express = require("express");
-
-// Import express-session so we can store user login + cart data between requests.
+// Sessions for storing per-user data like carts
 const session = require("express-session");
 
-// Import path so we can build safe file paths (works on Windows/Mac/Linux).
+// Web server framework
+const express = require("express");
+
+// Safe path building for Windows/Mac/Linux
 const path = require("path");
 
-// Create the Express application object (our server).
+
+// Create the Express server app
 const app = express();
 
-// Decide which port the server should listen on.
-// If a hosting service sets PORT, we use it; otherwise use 3000 locally.
+// Pick a port
 const PORT = process.env.PORT || 3000;
 
-// Tell Express which template engine we want to use for rendering HTML pages.
-// EJS files live in the "views" folder by default.
+
+// Use EJS templates in /views
 app.set("view engine", "ejs");
 
 
-
-
-// Tell Express where our static files live (CSS, client JS, images).
-// Anything inside /public can be requested by the browser directly.
+// Serve static files from /public
 app.use(express.static(path.join(__dirname, "public")));
 
-// Tell Express how to read "form posts" from HTML forms.
-// Without this, req.body will be undefined for POST requests from forms.
+
+// Read form POST data into req.body
 app.use(express.urlencoded({ extended: false }));
 
 
-
-// Formatted this to make it easier to read
+// Enable sessions so each visitor has their own storage area
 app.use(
     session({
-        secret: "dev-secret",
+        // Secret used to sign the session cookie
+        secret: "dev-secret-change-me-later",
+
+        // Avoid re-saving unchanged session data
         resave: false,
+
+        // Create a session even before we store anything in it
         saveUninitialized: true
     })
 );
 
 
-// Configure sessions so we can remember a user's cart and login status.
-// This stores a session ID in a cookie in the user's browser.
-app.use(
-    session({
-        // This secret is used to sign the session cookie (prevents tampering).
-        // In a real app you'd keep this in an environment variable.
-        secret: "dev-secret-change-me-later",
-
-        // Don't resave unchanged session data on every request.
-        resave: false,
-
-        // Save a new session even if we haven't added anything to it yet.
-        saveUninitialized: true,
-    })
-);
-
-// Make session values available to EVERY template automatically.
-// This allows the navbar/footer to show cart count or login status.
+// Make session data available inside every EJS template
 app.use((req, res, next) => {
-    // Expose the logged-in user (if any) to all EJS templates.
+
+    // Logged in user details if we add login later
     res.locals.user = req.session.user || null;
 
-    // Expose the cart (if any) to all EJS templates.
-    res.locals.cart = req.session.cart || [];
+    // Cart object used by navbar and cart page
+    res.locals.cart = req.session.cart || {};
 
-    // Continue to the next middleware/route handler.
     next();
 });
 
-// Import our GET routes (pages that render templates).
+
+// GET routes that show pages
 const pagesRoutes = require("./routes/pages");
 
-// Import our POST routes (actions like login, add-to-cart, etc.).
+// POST routes that do actions like add-to-cart
 const actionsRoutes = require("./routes/actions");
 
-// Register the GET routes.
+
+// Register page routes
 app.use("/", pagesRoutes);
 
-// Register the POST routes.
+// Register action routes
 app.use("/", actionsRoutes);
 
-// Catch-all for any route that doesn't exist.
-// This prevents "Cannot GET /whatever" messages.
+
+// Fallback for unknown routes
 app.use((req, res) => {
     res.status(404).send("404 - Page not found");
 });
 
-// Start listening for requests.
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });

@@ -1,17 +1,79 @@
 // routes/actions.js
-// This file contains POST routes that "do things" (actions) rather than show pages.
+// POST routes that change state like cart actions
 
 const express = require("express");
 
-// Create a router object for grouping action routes.
 const router = express.Router();
 
-// Temporary route to prove that POST handling works.
-// We'll replace this later with login/cart/checkout actions.
-router.post("/demo-post", (req, res) => {
-    // Send a simple response so we can verify POST works in the browser/devtools.
-    res.send("POST received successfully.");
+
+// Add a product to the cart
+router.post("/cart/add", (req, res) => {
+
+    // Product details coming from the products form
+    const { productId, name, price, qty } = req.body;
+
+    // Create cart storage on first use
+    if (!req.session.cart) {
+        req.session.cart = {};
+    }
+
+    // Convert qty and price into real numbers
+    const quantity = parseInt(qty, 10);
+    const unitPrice = parseFloat(price);
+
+    // Basic safety to avoid weird values
+    const safeQty = Number.isNaN(quantity) || quantity < 1 ? 1 : quantity;
+    const safePrice = Number.isNaN(unitPrice) || unitPrice < 0 ? 0 : unitPrice;
+
+    // If item already exists, just increase qty
+    if (req.session.cart[productId]) {
+        req.session.cart[productId].qty += safeQty;
+    } else {
+
+        // Otherwise create a new cart entry
+        req.session.cart[productId] = {
+            id: productId,
+            name,
+            price: safePrice,
+            qty: safeQty
+        };
+    }
+
+    // Send user to the cart page to view the result
+    res.redirect("/cart");
 });
 
-// Export the router so app.js can use it.
+
+// Remove a product from the cart entirely
+router.post("/cart/remove", (req, res) => {
+
+    // Product id to remove
+    const { productId } = req.body;
+
+    // If cart exists and the item exists, delete it
+    if (req.session.cart && req.session.cart[productId]) {
+        delete req.session.cart[productId];
+    }
+
+    // Back to cart page
+    res.redirect("/cart");
+});
+
+
+
+
+
+
+// Clear the cart; simply returns an empty array
+router.post("/cart/clear", (req, res) => {
+
+    // Replace cart with an empty object
+    req.session.cart = {};
+
+    // Back to cart page
+    res.redirect("/cart");
+});
+
+
+// Export router to app.js
 module.exports = router;
