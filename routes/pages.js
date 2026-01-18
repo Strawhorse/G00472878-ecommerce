@@ -5,6 +5,9 @@ const express = require("express");
 
 const router = express.Router();
 
+const productsRepo = require("../data/productsRepo");
+
+
 
 // Home page
 router.get("/", (req, res) => {
@@ -21,50 +24,14 @@ router.get("/", (req, res) => {
 
 // Products page
 router.get("/products", (req, res) => {
-
-    const products = [
-        {
-            id: 1,
-            name: "iPhone 15",
-            description: "Apple iPhone 15 with improved camera and performance",
-            price: 999.00,
-            image: "products/iphone15.jpg",
-        },
-        {
-            id: 2,
-            name: "Samsung Galaxy S24",
-            description: "Samsung flagship with AMOLED display",
-            price: 899.00,
-            image: "products/galaxyS24.jpg",
-        },
-        {
-            id: 3,
-            name: "Google Pixel 8",
-            description: "Clean Android experience with excellent photography",
-            price: 799.00,
-            image: "products/pixel8.jpg",
-        },
-        {
-            id: 4,
-            name: "OnePlus 12",
-            description: "Fast, smooth, and great value flagship phone",
-            price: 749.00,
-            image: "products/oneplus12.jpg",
-        },
-        {
-            id: 5,
-            name: "Xiaomi 13",
-            description: "High-end specs at a competitive price",
-            price: 699.00,
-            image: "products/xiaomi13.jpg",
-        },
-    ];
+    const products = productsRepo.getAllProducts();
 
     res.render("products", {
         title: "Mobile Phones",
-        products,
+        products
     });
 });
+
 
 
 // About placeholder
