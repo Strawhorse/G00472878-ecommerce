@@ -71,5 +71,21 @@ router.post("/cart/clear", (req, res) => {
 });
 
 
+// Place order placeholder
+router.post("/order/place", (req, res) => {
+
+    // Clear cart after placing order
+    req.session.cart = {};
+
+    // Go back to account page
+    res.redirect("/account");
+});
+
+
+
+
+
+
+
 // Export router to app.js
 module.exports = router;

@@ -109,13 +109,23 @@ router.get("/login", (req, res) => {
 });
 
 
-// Account page placeholder
+// Account page for each user
 router.get("/account", (req, res) => {
-    res.render("home", {
-        title: "Account (Coming Next)",
-        heroImage: null
+
+    // Convert cart object into array for EJS evaluation and processing
+    const cartItems = Object.values(req.session.cart || {});
+
+    // Calculate cart total
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+    // Render account page with order summary
+    res.render("account", {
+        title: "Account",
+        cartItems,
+        total
     });
 });
+
 
 
 // Export routes
