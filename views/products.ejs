@@ -1,54 +1,44 @@
 <!-- views/products.ejs -->
-<!-- Products page: shows a small catalog of products in a Bootstrap grid. -->
 
 <%- include("partialViews/head") %>
 <%- include("partialViews/navbar") %>
 
-<!-- Main page content container -->
 <main class="container my-4">
 
-    <!-- Page heading -->
     <h1 class="mb-3"><%= title %></h1>
 
-    <!-- Short intro text -->
     <p class="text-muted">
-        Browse our small catalog (5 products). Click “Add to Cart” to start an order.
+        Browse our small catalog (5 products)
+        Click “Add to Cart” to start an order
     </p>
 
-    <!-- Product grid -->
     <div class="row g-4">
 
         <% products.forEach(p => { %>
             <div class="col-12 col-sm-6 col-lg-4">
 
                 <div class="card h-100 shadow-sm">
-                    <!-- Product image -->
+
                     <img
                             src="/images/<%= p.image %>"
                             class="card-img-top"
                             alt="<%= p.name %>"
-                    />
+                    >
 
                     <div class="card-body d-flex flex-column">
 
-                        <!-- Product name -->
                         <h5 class="card-title"><%= p.name %></h5>
 
-                        <!-- Product description -->
                         <p class="card-text small text-muted"><%= p.description %></p>
 
-                        <!-- Price -->
                         <p class="fw-bold mb-3">€<%= p.price.toFixed(2) %></p>
 
-                        <!-- Add to cart (we’ll wire this POST route next) -->
                         <form action="/cart/add" method="POST" class="mt-auto">
-                            <!-- Send product ID to server -->
-                            <input type="hidden" name="productId" value="<%= p.id %>" />
+
+                            <input type="hidden" name="productId" value="<%= p.id %>">
                             <input type="hidden" name="name" value="<%= p.name %>">
                             <input type="hidden" name="price" value="<%= p.price %>">
 
-
-                            <!-- Quantity selector -->
                             <div class="input-group">
                                 <input
                                         type="number"
@@ -58,9 +48,12 @@
                                         min="1"
                                         max="10"
                                         required
-                                />
-                                <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                >
+                                <button type="submit" class="btn btn-primary">
+                                    Add to Cart
+                                </button>
                             </div>
+
                         </form>
 
                     </div>

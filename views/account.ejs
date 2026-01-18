@@ -1,0 +1,43 @@
+<!-- views/account.ejs -->
+
+<%- include("partialViews/head") %>
+<%- include("partialViews/navbar") %>
+
+<main class="container my-4">
+
+    <h1 class="mb-3"><%= title %></h1>
+
+    <h4 class="mb-3">Order summary</h4>
+
+    <% if (!lastOrder || !lastOrder.items || lastOrder.items.length === 0) { %>
+
+        <div class="alert alert-warning">
+            No order placed yet
+        </div>
+
+        <a class="btn btn-primary" href="/products">Go to products</a>
+
+    <% } else { %>
+
+        <div class="alert alert-success">
+            Order placed
+        </div>
+
+        <ul class="list-group mb-3">
+            <% lastOrder.items.forEach(item => { %>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span><%= item.name %> (x<%= item.qty %>)</span>
+                    <strong>€<%= (item.price * item.qty).toFixed(2) %></strong>
+                </li>
+            <% }) %>
+        </ul>
+
+        <h5>Total €<%= lastOrder.total.toFixed(2) %></h5>
+
+        <a class="btn btn-primary mt-3" href="/products">Continue shopping</a>
+
+    <% } %>
+
+</main>
+
+<%- include("partialViews/footer") %>
