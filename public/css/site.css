@@ -13,7 +13,6 @@
 /* Product images: this is to keep all cards visually consistent as I didn't have time to format their dimensions */
 /* Product images uniform sizing */
 .card-img-top {
-    width: 100%;
     height: 220px;
     object-fit: cover;
 }

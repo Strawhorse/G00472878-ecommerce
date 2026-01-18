@@ -1,92 +1,73 @@
+<!-- views/cart.ejs -->
+
 <%- include("partialViews/head") %>
 <%- include("partialViews/navbar") %>
 
-
 <main class="container my-4">
 
-    <!-- Page heading -->
     <h1 class="mb-3"><%= title %></h1>
-
 
     <% if (cartItems.length === 0) { %>
 
-        <!-- Empty cart message -->
         <div class="alert alert-warning">
-            Your cart is empty
+            No items in cart
         </div>
 
-        <a href="/products" class="btn btn-primary">
-            Go to products
-        </a>
+        <a class="btn btn-primary" href="/products">Go to products</a>
 
     <% } else { %>
 
-        <!-- Cart items list -->
         <ul class="list-group mb-3">
-
             <% cartItems.forEach(item => { %>
-
                 <li class="list-group-item d-flex justify-content-between align-items-center">
 
-                    <!-- Item name and qty -->
                     <div>
                         <div class="fw-semibold"><%= item.name %></div>
                         <div class="text-muted small">Qty <%= item.qty %></div>
                     </div>
 
-                    <div class="d-flex align-items-center gap-3">
+                    <div class="text-end">
+                        <div class="fw-semibold">€<%= (item.price * item.qty).toFixed(2) %></div>
 
-                        <!-- Item subtotal -->
-                        <div class="fw-bold">
-                            €<%= (item.price * item.qty).toFixed(2) %>
-                        </div>
-
-                        <!-- Remove item -->
-                        <form action="/cart/remove" method="POST" class="m-0">
+                        <form action="/cart/remove" method="POST" class="mt-2">
                             <input type="hidden" name="productId" value="<%= item.id %>">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">
                                 Remove
                             </button>
                         </form>
-
                     </div>
 
                 </li>
-
             <% }) %>
-
         </ul>
 
-
-        <!-- Cart total -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="fs-5 fw-semibold">Total</div>
-            <div class="fs-5 fw-bold">€<%= total.toFixed(2) %></div>
+            <h4 class="mb-0">Total</h4>
+            <h4 class="mb-0">€<%= total.toFixed(2) %></h4>
         </div>
 
-
-        <!-- Cart actions -->
         <div class="d-flex gap-2">
 
-            <a href="/products" class="btn btn-outline-primary">
+            <a class="btn btn-outline-primary" href="/products">
                 Continue shopping
             </a>
 
-            <form action="/cart/clear" method="POST" class="m-0 ms-auto">
-                <button type="submit" class="btn btn-outline-danger">
+            <form action="/cart/clear" method="POST" class="ms-auto">
+                <button class="btn btn-outline-danger" type="submit">
                     Clear cart
                 </button>
             </form>
 
-            <a href="/account" class="btn btn-success">
-                Checkout
-            </a>
+            <form action="/order/place" method="POST">
+                <button class="btn btn-success" type="submit">
+                    Checkout
+                </button>
+            </form>
 
         </div>
 
     <% } %>
 
 </main>
-
 
 <%- include("partialViews/footer") %>

@@ -1,10 +1,8 @@
 <!-- views/home.ejs -->
-<!-- Home page: includes shared head/navbar/footer partials. -->
 
 <%- include("partialViews/head") %>
 <%- include("partialViews/navbar") %>
 
-<!-- Main page content container -->
 <main class="container my-4">
 
     <% if (heroImage) { %>
@@ -13,19 +11,18 @@
                     src="/images/<%= heroImage %>"
                     class="img-fluid rounded"
                     alt="Hero image"
-            />
-
+            >
         </div>
     <% } %>
 
     <h1 class="mb-3"><%= title %></h1>
 
     <p class="lead">
-        Your Node + EJS site is alive. Next we’ll build real pages and pull 5 products from MySQL.
+        Your Node + EJS site is alive
     </p>
 
     <div class="alert alert-info">
-        Tip: refresh the Home page to see the hero image change.
+        Tip: refresh the Home page to see the hero image change
     </div>
 
 </main>

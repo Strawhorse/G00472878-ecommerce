@@ -1,62 +1,39 @@
-<!-- views/partials/navbar.ejs -->
-<!-- Shared top banner used on every page -->
+<!-- views/partialViews/navbar.ejs -->
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
     <div class="container">
 
         <a class="navbar-brand" href="/">G00472878 Store</a>
 
-        <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#nav"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="nav">
-
             <ul class="navbar-nav ms-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Products</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">About</a>
-                </li>
-
-                <li class="nav-item">
+                <li class="nav-item d-flex align-items-center">
                     <a class="nav-link" href="/cart">
                         Cart
-                        <% if (cartCount > 0) { %>
-                            <span class="badge bg-primary ms-1">
-                                <%= cartCount %>
-                            </span>
+                        <% const count = Object.values(cart || {}).reduce((sum, item) => sum + item.qty, 0); %>
+                        <% if (count > 0) { %>
+                            <span class="badge bg-primary ms-1"><%= count %></span>
                         <% } %>
                     </a>
                 </li>
 
                 <% if (user) { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/account">Account</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
                 <% } else { %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
                 <% } %>
 
             </ul>
-
         </div>
 
     </div>
-
 </nav>
