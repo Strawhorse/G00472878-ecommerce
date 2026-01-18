@@ -1,8 +1,6 @@
--- db/seed.sql
--- Database + table + starter products
 
-CREATE DATABASE IF NOT EXISTS g00472878_shop;
-USE g00472878_shop;
+CREATE DATABASE IF NOT EXISTS g00472878;
+USE g00472878;
 
 DROP TABLE IF EXISTS products;
 
@@ -20,3 +18,4 @@ INSERT INTO products (name, description, price, image) VALUES
        ('Google Pixel 8', 'Clean Android experience', 799.00, 'products/pixel8.jpg'),
        ('OnePlus 12', 'Fast, smooth, and great value', 749.00, 'products/oneplus12.jpg'),
        ('Xiaomi 13', 'High-end specs', 699.00, 'products/xiaomi13.jpg');
+
