@@ -1,27 +1,30 @@
 <!-- views/products.ejs -->
-<!-- Products page: shows a small catalog of products in a Bootstrap grid. -->
+<!-- Products page shows a small catalog in a Bootstrap grid -->
 
 <%- include("partialViews/head") %>
 <%- include("partialViews/navbar") %>
 
-<!-- Main page content container -->
+
 <main class="container my-4">
 
     <!-- Page heading -->
     <h1 class="mb-3"><%= title %></h1>
 
-    <!-- Short intro text -->
+    <!-- Short intro -->
     <p class="text-muted">
-        Browse our small catalog (5 products). Click “Add to Cart” to start an order.
+        Browse our small catalog (5 products)
     </p>
+
 
     <!-- Product grid -->
     <div class="row g-4">
 
         <% products.forEach(p => { %>
+
             <div class="col-12 col-sm-6 col-lg-4">
 
                 <div class="card h-100 shadow-sm">
+
                     <!-- Product image -->
                     <img
                             src="/images/<%= p.image %>"
@@ -37,12 +40,11 @@
                         <!-- Product description -->
                         <p class="card-text small text-muted"><%= p.description %></p>
 
-                        <!-- Price -->
+                        <!-- Product price -->
                         <p class="fw-bold mb-3">€<%= p.price.toFixed(2) %></p>
 
 
-                        <!-- Add to cart (we’ll wire this POST route next) -->
-                        <!-- the form POSTs to /cart/add-->
+                        <!-- Add to cart form -->
                         <form action="/cart/add" method="POST" class="mt-auto">
 
                             <input type="hidden" name="productId" value="<%= p.id %>">
@@ -70,10 +72,12 @@
                 </div>
 
             </div>
+
         <% }) %>
 
     </div>
 
 </main>
+
 
 <%- include("partialViews/footer") %>

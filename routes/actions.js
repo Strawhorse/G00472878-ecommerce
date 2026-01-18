@@ -21,7 +21,7 @@ router.post("/cart/add", (req, res) => {
     const quantity = parseInt(qty, 10);
     const unitPrice = parseFloat(price);
 
-    // Basic safety to avoid weird values
+    // Basic safety for weird values
     const safeQty = Number.isNaN(quantity) || quantity < 1 ? 1 : quantity;
     const safePrice = Number.isNaN(unitPrice) || unitPrice < 0 ? 0 : unitPrice;
 
@@ -50,7 +50,7 @@ router.post("/cart/remove", (req, res) => {
     // Product id to remove
     const { productId } = req.body;
 
-    // If cart exists and the item exists, delete it
+    // If cart exists and item exists, delete it
     if (req.session.cart && req.session.cart[productId]) {
         delete req.session.cart[productId];
     }
@@ -60,14 +60,10 @@ router.post("/cart/remove", (req, res) => {
 });
 
 
-
-
-
-
-// Clear the cart; simply returns an empty array
+// Clear the whole cart
 router.post("/cart/clear", (req, res) => {
 
-    // Replace cart with an empty object
+    // Reset cart back to empty object
     req.session.cart = {};
 
     // Back to cart page

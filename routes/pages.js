@@ -38,17 +38,46 @@ router.get("/products", (req, res) => {
         {
             id: 2,
             name: "Samsung Galaxy S24",
-            description: "Samsung flagship with AMOLED display",
+            description: "Samsung flagship with AMOLED display and fast performance",
             price: 899.00,
             image: "products/galaxyS24.jpg"
+        },
+        {
+            id: 3,
+            name: "Google Pixel 8",
+            description: "Clean Android experience with excellent photography",
+            price: 799.00,
+            image: "products/pixel8.jpg"
+        },
+        {
+            id: 4,
+            name: "OnePlus 12",
+            description: "Fast, smooth, and great value flagship phone",
+            price: 749.00,
+            image: "products/oneplus12.jpg"
+        },
+        {
+            id: 5,
+            name: "Xiaomi 13",
+            description: "High-end specs at a competitive price",
+            price: 699.00,
+            image: "products/xiaomi13.jpg"
         }
-        // etc
     ];
 
     // Render products page
     res.render("products", {
         title: "Mobile Phones",
         products
+    });
+});
+
+
+// About page placeholder
+router.get("/about", (req, res) => {
+    res.render("home", {
+        title: "About (Coming Next)",
+        heroImage: null
     });
 });
 
@@ -60,16 +89,31 @@ router.get("/cart", (req, res) => {
     const cartItems = Object.values(req.session.cart || {});
 
     // Calculate cart total
-    const total = cartItems.reduce(
-        (sum, item) => sum + item.price * item.qty,
-        0
-    );
+    const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     // Render cart page
     res.render("cart", {
         title: "Your Cart",
         cartItems,
         total
+    });
+});
+
+
+// Login page placeholder
+router.get("/login", (req, res) => {
+    res.render("home", {
+        title: "Login (Coming Next)",
+        heroImage: null
+    });
+});
+
+
+// Account page placeholder
+router.get("/account", (req, res) => {
+    res.render("home", {
+        title: "Account (Coming Next)",
+        heroImage: null
     });
 });
 

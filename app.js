@@ -3,13 +3,13 @@
 // Node runs this first when you do npm start
 
 
-// Sessions for storing per-user data like carts
+// Sessions for per-user data like carts
 const session = require("express-session");
 
 // Web server framework
 const express = require("express");
 
-// Safe path building for Windows/Mac/Linux
+// Safe paths for Windows/Mac/Linux
 const path = require("path");
 
 
@@ -50,14 +50,21 @@ app.use(
 // Make session data available inside every EJS template
 app.use((req, res, next) => {
 
-    // Logged in user details if we add login later
+    // Logged in user placeholder for later
     res.locals.user = req.session.user || null;
 
-    // Cart object used by navbar and cart page
+    // Cart stored as object keyed by productId
     res.locals.cart = req.session.cart || {};
+
+    // Total quantity across all items for navbar badge
+    const items = Object.values(res.locals.cart);
+    res.locals.cartCount = items.reduce((sum, item) => sum + item.qty, 0);
 
     next();
 });
+
+
+
 
 
 // GET routes that show pages
@@ -65,6 +72,11 @@ const pagesRoutes = require("./routes/pages");
 
 // POST routes that do actions like add-to-cart
 const actionsRoutes = require("./routes/actions");
+
+
+
+
+
 
 
 // Register page routes
