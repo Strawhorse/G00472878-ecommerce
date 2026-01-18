@@ -1,0 +1,16 @@
+/* public/css/site.css */
+/* Keep styling minimal and let Bootstrap do most of the work. */
+
+.hero img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Product images: this is to keep all cards visually consistent as I didn't have time to format their dimensions */
+/* Here we had to fix the container not the content of the containter (i.e. the phones)*/
+.card-img-top {
+    height: 220px;          /* Fixed height for all product images */
+    object-fit: cover;      /* Crop images to fit without distortion */
+}
