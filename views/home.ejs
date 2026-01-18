@@ -1,29 +1,72 @@
 <!-- views/home.ejs -->
+<!-- Home page with Bootstrap carousel -->
+<!-- Carousel starts on a random slide each refresh -->
 
 <%- include("partialViews/head") %>
 <%- include("partialViews/navbar") %>
 
 <main class="container my-4">
 
-    <% if (heroImage) { %>
-        <div class="hero mb-4">
-            <img
-                    src="/images/<%= heroImage %>"
-                    class="img-fluid rounded"
-                    alt="Hero image"
-            >
-        </div>
-    <% } %>
-
     <h1 class="mb-3"><%= title %></h1>
 
-    <p class="lead">
-        Your Node + EJS site is alive
+    <p class="text-muted">
+        Welcome to the store
     </p>
 
-    <div class="alert alert-info">
-        Tip: refresh the Home page to see the hero image change
-    </div>
+
+    <% if (carouselImages && carouselImages.length > 0) { %>
+
+        <div id="homeCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+
+            <div class="carousel-indicators">
+
+                <% carouselImages.forEach((img, idx) => { %>
+                    <button
+                            type="button"
+                            data-bs-target="#homeCarousel"
+                            data-bs-slide-to="<%= idx %>"
+                            class="<%= idx === startIndex ? 'active' : '' %>"
+                            aria-current="<%= idx === startIndex ? 'true' : 'false' %>"
+                            aria-label="Slide <%= idx + 1 %>"
+                    ></button>
+                <% }) %>
+
+            </div>
+
+
+            <div class="carousel-inner rounded shadow-sm">
+
+                <% carouselImages.forEach((img, idx) => { %>
+
+                    <div class="carousel-item <%= idx === startIndex ? 'active' : '' %>">
+
+                        <img
+                                src="/images/<%= img %>"
+                                class="d-block w-100"
+                                alt="Carousel slide <%= idx + 1 %>"
+                        >
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
+        </div>
+
+    <% } %>
+
 
 </main>
 

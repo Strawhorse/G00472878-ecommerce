@@ -21,21 +21,30 @@ const requireLogin = (req, res, next) => {
 
 /*
 |--------------------------------------------------------------------------
-| Home
+| Home page
 |--------------------------------------------------------------------------
-| Random hero image on refresh
+| Carousel images provided to the view
+| Start slide chosen randomly on each refresh
 */
 router.get("/", (req, res) => {
 
-    const heroImages = ["hero1.jpg", "hero2.jpg", "hero3.jpg"];
-    const randomHero = heroImages[Math.floor(Math.random() * heroImages.length)];
+    const carouselImages = [
+        "carousel/galaxyS24.jpg",
+        "carousel/iphone15.jpg",
+        "carousel/oneplus12.jpg",
+        "carousel/pixel8.jpg",
+        "carousel/xiaomi13.jpg"
+    ];
+
+    const startIndex =
+        Math.floor(Math.random() * carouselImages.length);
 
     res.render("home", {
         title: "Homepage",
-        heroImage: randomHero
+        carouselImages,
+        startIndex
     });
 });
-
 
 
 /*
@@ -154,13 +163,13 @@ router.get("/account", requireLogin, (req, res) => {
 
 /*
 |--------------------------------------------------------------------------
-| Static placeholders
+| About page
 |--------------------------------------------------------------------------
+| Static information about the project and author
 */
 router.get("/about", (req, res) => {
-    res.render("home", {
-        title: "About (Coming Next)",
-        heroImage: null
+    res.render("about", {
+        title: "About"
     });
 });
 

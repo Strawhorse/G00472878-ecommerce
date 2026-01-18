@@ -16,3 +16,13 @@
     height: 220px;
     object-fit: cover;
 }
+
+
+
+
+/* Home carousel image sizing */
+/*Stopped it becoming ugly*/
+.carousel-inner img {
+    height: 320px;
+    object-fit: cover;
+}
