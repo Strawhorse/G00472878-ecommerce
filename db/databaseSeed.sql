@@ -2,7 +2,24 @@
 CREATE DATABASE IF NOT EXISTS g00472878;
 USE g00472878;
 
-DROP TABLE IF EXISTS products;
+-- Table for the user
+
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+                       id INT AUTO_INCREMENT PRIMARY KEY,
+                       email VARCHAR(150) NOT NULL UNIQUE,
+                       password VARCHAR(150) NOT NULL
+);
+
+
+
+INSERT INTO users (email, password) VALUES
+    ('user@123.com', 'pass');
+
+
+
+-- Table for the products, then insert them
 
 CREATE TABLE products (
                           id INT AUTO_INCREMENT PRIMARY KEY,

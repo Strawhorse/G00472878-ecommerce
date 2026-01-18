@@ -1,0 +1,68 @@
+<%- include("partialViews/head") %>
+<%- include("partialViews/navbar") %>
+
+<main class="container my-4">
+
+    <a href="/products" class="btn btn-link px-0 mb-3">
+        &larr; Back to products
+    </a>
+
+
+    <div class="row g-4">
+
+        <div class="col-12 col-md-6">
+
+            <div class="card shadow-sm">
+                <img
+                        src="/images/<%= product.image %>"
+                        class="card-img-top"
+                        alt="<%= product.name %>"
+                >
+            </div>
+
+        </div>
+
+
+        <div class="col-12 col-md-6">
+
+            <h1 class="mb-2"><%= product.name %></h1>
+
+            <p class="text-muted">
+                <%= product.description %>
+            </p>
+
+            <p class="fw-bold fs-4">
+                €<%= Number(product.price).toFixed(2) %>
+            </p>
+
+
+            <form action="/cart/add" method="POST" class="mt-3">
+
+                <input type="hidden" name="productId" value="<%= product.id %>">
+                <input type="hidden" name="name" value="<%= product.name %>">
+                <input type="hidden" name="price" value="<%= product.price %>">
+
+                <div class="input-group" style="max-width: 240px;">
+                    <input
+                            type="number"
+                            name="qty"
+                            class="form-control"
+                            value="1"
+                            min="1"
+                            max="10"
+                            required
+                    >
+                    <button type="submit" class="btn btn-success">
+                        Add to Cart
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
+
+<%- include("partialViews/footer") %>

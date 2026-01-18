@@ -1,0 +1,48 @@
+<%- include("partialViews/head") %>
+<%- include("partialViews/navbar") %>
+
+<main class="container my-4">
+
+    <h1 class="mb-3">Login</h1>
+
+
+    <% if (error) { %>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
+    <% } %>
+
+
+    <form action="/login" method="POST" class="col-12 col-md-6">
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    required
+                    autocomplete="username"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    required
+                    autocomplete="current-password"
+            >
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Login
+        </button>
+
+    </form>
+
+</main>
+
+<%- include("partialViews/footer") %>

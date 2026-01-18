@@ -1,68 +1,161 @@
 // routes/pages.js
-// Handles all "page" routes (GET requests that render EJS views)
+// Handles all GET requests that render pages
 
 const express = require("express");
 const router = express.Router();
 
-// Import the MySQL connection pool
-// This allows us to query the database using async/await
 const pool = require("../db/db");
+
+
+
+const requireLogin = (req, res, next) => {
+
+    if (!req.session.user) {
+        return res.redirect("/login");
+    }
+
+    next();
+};
+
+
 
 /*
 |--------------------------------------------------------------------------
-| HOME PAGE
+| Home
 |--------------------------------------------------------------------------
-| Displays the homepage with a random hero image.
-| No database access here yet.
+| Random hero image on refresh
 */
 router.get("/", (req, res) => {
 
-    // Available hero images (stored in /public/images)
     const heroImages = ["hero1.jpg", "hero2.jpg", "hero3.jpg"];
-
-    // Pick one at random each page load
     const randomHero = heroImages[Math.floor(Math.random() * heroImages.length)];
 
-    // Render home.ejs and pass data into the template
     res.render("home", {
         title: "Homepage",
         heroImage: randomHero
     });
 });
 
+
+
 /*
 |--------------------------------------------------------------------------
-| PRODUCTS PAGE
+| Products
 |--------------------------------------------------------------------------
-| Fetches all products from the MySQL database and
-| displays them in a Bootstrap grid using products.ejs.
+| Loads products from DB
 */
 router.get("/products", async (req, res) => {
+
     try {
-        // Query the products table
-        // Returns an array of rows (each row = one product)
+
         const [rows] = await pool.query(
-            "SELECT id, name, description, price, image FROM products"
+            "SELECT id, name, description, price, image FROM products ORDER BY id"
         );
 
-        // Render products.ejs and pass the products to the view
         res.render("products", {
             title: "Mobile Phones",
             products: rows
         });
 
     } catch (err) {
-        // If something goes wrong (DB offline, SQL error, etc.)
-        console.error("Error loading products:", err);
+        console.error("DB error loading products", err);
         res.status(500).send("Database error loading products");
     }
 });
 
+
+
 /*
 |--------------------------------------------------------------------------
-| ABOUT PAGE (PLACEHOLDER)
+| Product details
 |--------------------------------------------------------------------------
-| Static page for now — real content later.
+*/
+router.get("/products/:id", async (req, res) => {
+
+    try {
+
+        const productId = req.params.id;
+
+        const [rows] = await pool.query(
+            "SELECT id, name, description, price, image FROM products WHERE id = ? LIMIT 1",
+            [productId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).send("Product not found");
+        }
+
+        res.render("productDetails", {
+            title: rows[0].name,
+            product: rows[0]
+        });
+
+    } catch (err) {
+        console.error("DB error loading product details", err);
+        res.status(500).send("Database error loading product");
+    }
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Cart
+|--------------------------------------------------------------------------
+*/
+router.get("/cart", (req, res) => {
+
+    const cartItems = Object.values(req.session.cart || {});
+    const total = cartItems.reduce(
+        (sum, item) => sum + Number(item.price) * Number(item.qty),
+        0
+    );
+
+    res.render("cart", {
+        title: "Your Cart",
+        cartItems,
+        total
+    });
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Login page
+|--------------------------------------------------------------------------
+*/
+router.get("/login", (req, res) => {
+
+    res.render("login", {
+        title: "Login",
+        error: null
+    });
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Account page
+|--------------------------------------------------------------------------
+| Requires login
+| Shows last order
+*/
+router.get("/account", requireLogin, (req, res) => {
+
+    res.render("account", {
+        title: "Account",
+        lastOrder: req.session.lastOrder || null
+    });
+});
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Static placeholders
+|--------------------------------------------------------------------------
 */
 router.get("/about", (req, res) => {
     res.render("home", {
@@ -71,56 +164,6 @@ router.get("/about", (req, res) => {
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| CART PAGE
-|--------------------------------------------------------------------------
-| Displays all items currently stored in the session cart.
-*/
-router.get("/cart", (req, res) => {
 
-    // Convert cart object into an array
-    const cartItems = Object.values(req.session.cart || {});
 
-    // Calculate total price
-    const total = cartItems.reduce(
-        (sum, item) => sum + item.price * item.qty,
-        0
-    );
-
-    // Render cart.ejs with cart data
-    res.render("cart", {
-        title: "Your Cart",
-        cartItems,
-        total
-    });
-});
-
-/*
-|--------------------------------------------------------------------------
-| LOGIN PAGE (PLACEHOLDER)
-|--------------------------------------------------------------------------
-| Authentication will be added later.
-*/
-router.get("/login", (req, res) => {
-    res.render("home", {
-        title: "Login (Coming Next)",
-        heroImage: null
-    });
-});
-
-/*
-|--------------------------------------------------------------------------
-| ACCOUNT PAGE
-|--------------------------------------------------------------------------
-| Displays order confirmation and future account info.
-*/
-router.get("/account", (req, res) => {
-    res.render("account", {
-        title: "Account",
-        message: null
-    });
-});
-
-// Export the router so app.js can use it
 module.exports = router;
