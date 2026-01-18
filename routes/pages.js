@@ -110,18 +110,18 @@ router.get("/login", (req, res) => {
 
 
 // Account page for each user
+
+
 router.get("/account", (req, res) => {
 
-    const cartItems = Object.values(req.session.cart || {});
-
-    const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const lastOrder = req.session.lastOrder || null;
 
     res.render("account", {
         title: "Account",
-        cartItems,
-        total
+        lastOrder
     });
 });
+
 
 
 
